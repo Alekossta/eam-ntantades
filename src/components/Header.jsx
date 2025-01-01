@@ -1,20 +1,29 @@
 import React from 'react';
-import { AppBar, Toolbar, Typography, Button } from '@mui/material';
-import { Link as RouterLink } from 'react-router-dom';
+import { AppBar, Toolbar,  Box, Button } from '@mui/material';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 function Header() {
+  const navigate = useNavigate();
   return (
-    <AppBar position="static">
-      <Toolbar>
-        <Typography variant="h6" sx={{ flexGrow: 1 }}>
-          MyApp
-        </Typography>
-        <Button color="inherit" component={RouterLink} to="/">
-          Home
-        </Button>
-        <Button color="inherit" component={RouterLink} to="/about">
-          About
-        </Button>
+    <AppBar position="static" elevation={0}>
+      <Toolbar disableGutters>
+        <Box
+          component="img"
+          src="/logo.png"
+          alt="Logo"
+          sx={{
+            height: 75,
+            width: 75,
+            margin: "0.75rem",
+            cursor: "pointer",
+          }}
+          onClick={() => navigate("/")}
+        />
+        <Box sx={{marginLeft: "auto"}}>
+          <Button color="inherit" component={RouterLink} to="/about">
+            About
+          </Button>       
+        </Box>
       </Toolbar>
     </AppBar>
   );

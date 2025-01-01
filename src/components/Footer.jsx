@@ -10,12 +10,11 @@ function Footer() {
         px: 3,
         mt: 'auto',
         backgroundColor: 'primary.main',
-        color: 'white',
         textAlign: 'center',
       }}
     >
-      <Typography variant="body2">
-        © {new Date().getFullYear()} MyApp. All rights reserved.
+      <Typography>
+        © {new Date().getFullYear()} Ntantades.
       </Typography>
     </Box>
   );
