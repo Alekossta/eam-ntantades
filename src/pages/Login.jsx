@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import { auth } from "../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const {
@@ -22,6 +23,7 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
+  const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
@@ -33,7 +35,7 @@ const Login = () => {
     try
     {
         const userCredentials = await signInWithEmailAndPassword(auth, data.email, data.password);
-        console.log("Logged in to", userCredentials.user.email);
+        navigate("/");
     }
     catch (error)
     {
