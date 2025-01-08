@@ -20,16 +20,14 @@ function App() {
       }}
     >
       <Header />
-      <Container component="main" sx={{ flex: 1 }}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/login" element={<Login/>}/>
-          <Route path="/register" element={<Register />} />
-          <Route path="/register/parent" element={<RegisterParent />} />
-          <Route path="/register/sitter" element={<RegisterSitter />} />
-        </Routes>
-      </Container>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/login" element={<Login/>}/>
+        <Route path="/register" element={<Register />} />
+        <Route path="/register/parent" element={<RegisterParent />} />
+        <Route path="/register/sitter" element={<RegisterSitter />} />
+      </Routes>
       <Footer />
     </Box>
   );
