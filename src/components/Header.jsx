@@ -4,10 +4,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { useState, useEffect } from 'react';
 import { auth } from '../firebase';
+import { useAppCtx } from '../appCtx';
+
 function Header() {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null); // Tracks if the user is logged in
-
+  const {user} = useAppCtx();
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event) => {
@@ -17,16 +18,6 @@ function Header() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  useEffect(() => {
-      // Listen for authentication state changes
-      const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-          setUser(currentUser);
-      });
-
-      // Cleanup the listener on component unmount
-      return () => unsubscribe();
-  }, []);
 
   const handleLogout = async () => {
     try {
@@ -61,7 +52,7 @@ function Header() {
                     color="inherit"
                     onClick={handleClick}
                   >
-                    Hello
+                    {user.email}
                   </Button>
                   <Menu
                     id="simple-menu"

@@ -31,7 +31,7 @@ export default function Home()
                 }}
             
             >
-                <Typography variant="h1" color="white">
+                <Typography variant="h1" color="white" sx={{marginY: "2rem"}}>
                     ΝΤΑΝΤΑΔΕΣ
                 </Typography>
                 <Typography color="white" fontSize={"2em"} textAlign={"center"}>
@@ -40,7 +40,7 @@ export default function Home()
                 <Box sx={{width:"50%", height: "4rem", display: "flex", justifyContent: "space-between", marginTop: "3rem"}}>
                     <Button
                         component={Link}
-                        to="/register/parent"
+                        to="/parent/register"
                         color="secondary"
                         variant="contained"
                         size="large"
@@ -49,7 +49,7 @@ export default function Home()
                     </Button>
                     <Button
                         component={Link}
-                        to="/register/sitter"
+                        to="/sitter/register"
                         color="secondary"
                         variant="contained"
                         size="large"
