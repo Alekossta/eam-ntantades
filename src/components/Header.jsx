@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppBar, Toolbar,  Box, Button, Typography } from '@mui/material';
+import { AppBar, Toolbar,  Box, Button, Menu, MenuItem } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { useState, useEffect } from 'react';
@@ -7,6 +7,16 @@ import { auth } from '../firebase';
 function Header() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null); // Tracks if the user is logged in
+
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   useEffect(() => {
       // Listen for authentication state changes
@@ -21,6 +31,7 @@ function Header() {
   const handleLogout = async () => {
     try {
         await signOut(auth);
+        setAnchorEl(null);
         navigate("/");
     } catch (error) {
         console.error("Error logging out:", error);
@@ -46,15 +57,26 @@ function Header() {
           {user ? (
               // If the user is logged in
               <>
-                  <Typography variant="body1" sx={{ marginRight: 2 }}>
-                      {user.email || "User"}
-                  </Typography>
                   <Button
-                      color="inherit"
-                      onClick={handleLogout}
+                    color="inherit"
+                    onClick={handleClick}
                   >
-                      Logout
+                    Hello
                   </Button>
+                  <Menu
+                    id="simple-menu"
+                    anchorEl={anchorEl}
+                    keepMounted
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                  >
+                    <MenuItem component={Link} to="/link1" onClick={handleClose}>
+                      ΠΡΟΦΙΛ
+                    </MenuItem>
+                    <MenuItem component={Button} to="/link2" onClick={handleLogout}>
+                      Αποσύνδεση
+                    </MenuItem>
+                  </Menu>
               </>
           ) : (
               // If the user is not logged in

@@ -1,29 +1,62 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Button } from "@mui/material";
+import { Link } from "react-router-dom";
 
 export default function Home()
 {
     return <Box sx={{width:"100%", height: "100%"}}>
         <Box
             sx={{
-                width: '100%', // Adjust the width as needed
-                height: '100vh', // Adjust the height as needed
-                backgroundImage: `url('homeWallpaper.png')`, // Replace with your image URL
-                backgroundSize: 'cover', // Makes sure the image covers the box
-                backgroundPosition: 'center', // Centers the image
-                backgroundRepeat: 'no-repeat', // Prevents the image from repeating
-                padding: "2rem"
+                width: '100%',
+                height: '100vh', 
+                backgroundImage: `url('homeWallpaper.png')`, 
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                padding: "2rem",
+                display: "flex",
+                justifyContent: "center",
             }}
         >
             <Box
                 sx={{
-                    backgroundColor: "rgba(0,0,0,0.5)",
-                    marginTop: "2rem"
+                    backgroundColor: "rgba(0,0,0,0.8)",
+                    marginTop: "2rem",
+                    width: "60%",
+                    height: "50vh",
+                    borderRadius: "30px",
+                    display: "flex",
+                    alignItems: "center",
+                    flexDirection: "column",
+                    padding: "1rem"
                 }}
             
             >
-                <Typography variant="h1">
+                <Typography variant="h1" color="white">
                     ΝΤΑΝΤΑΔΕΣ
                 </Typography>
+                <Typography color="white" fontSize={"2em"} textAlign={"center"}>
+                    Η πλατφόρμα που ταιριάζει τον καταλληλο γονέα στην κατάληλλη νταντά
+                </Typography>
+                <Box sx={{width:"50%", height: "4rem", display: "flex", justifyContent: "space-between", marginTop: "3rem"}}>
+                    <Button
+                        component={Link}
+                        to="/register/parent"
+                        color="secondary"
+                        variant="contained"
+                        size="large"
+                    >
+                        Είμαι Γονέας
+                    </Button>
+                    <Button
+                        component={Link}
+                        to="/register/sitter"
+                        color="secondary"
+                        variant="contained"
+                        size="large"
+                    >
+                        Είμαι Νταντά
+                    </Button>
+                </Box>
             </Box>
         </Box>
     </Box>
