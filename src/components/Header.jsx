@@ -10,6 +10,8 @@ function Header() {
 
   const [anchorEl, setAnchorEl] = useState(null);
 
+  console.log(user);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -61,7 +63,7 @@ function Header() {
                     color="inherit"
                     onClick={handleClick}
                   >
-                    Hello
+                    {user.email}
                   </Button>
                   <Menu
                     id="simple-menu"
