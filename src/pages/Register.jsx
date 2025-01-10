@@ -11,7 +11,7 @@ export default function Register()
         <Box sx={{width:"30%", display: "flex", justifyContent: "space-between", marginTop: "3rem"}}>
             <Button
                 component={Link} // Makes the button act as a link
-                to="/register/parent" // Specify the route
+                to="/parent/register" // Specify the route
                 color="secondary" // Secondary color
                 variant="contained" // Contained style
                 size="large"
@@ -20,7 +20,7 @@ export default function Register()
             </Button>
             <Button
                 component={Link} // Makes the button act as a link
-                to="/register/sitter" // Specify the route
+                to="/sitter/register" // Specify the route
                 color="secondary" // Secondary color
                 variant="contained" // Contained style
                 size="large"

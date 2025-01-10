@@ -21,13 +21,13 @@ import {
   ListItemText
 } from "@mui/material";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth, db } from "../firebase"; // Import Firebase modules
+import { auth, db } from "../../firebase"; // Import Firebase modules
 import { setDoc, doc } from "firebase/firestore";
 import { DatePicker } from "@mui/x-date-pickers";
 import { useDropzone } from 'react-dropzone';
 import { useNavigate } from "react-router-dom";
 
-const RegisterSitter = () => {
+const EditSitter = () => {
 const {
     handleSubmit,
     control,
@@ -38,6 +38,7 @@ const {
 
     // States for the two drag-and-drop fields
     const profilePhoto = watch("profilePhoto", null); // Profile photo
+    const referenceFiles = watch("referenceFiles", []); // Reference letters
 
     const [errorMessage, setErrorMessage] = useState("");
     const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -50,12 +51,25 @@ const {
         setValue("profilePhoto", file); // Update form state
     };
 
+    const onDropReferenceFiles = (acceptedFiles) => {
+    const updatedFiles = referenceFiles.concat(acceptedFiles); // Merge with existing files
+        setValue("referenceFiles", updatedFiles); // Update form state
+    };
+
     const profilePhotoDropzone = useDropzone({
         onDrop: onDropProfilePhoto,
         accept: {
             "image/*": [".jpg", ".jpeg", ".png"], // Only allow images
         },
         maxFiles: 1, // Allow only one file
+    });
+
+    const referenceFilesDropzone = useDropzone({
+        onDrop: onDropReferenceFiles,
+        accept: {
+            "image/*": [".jpg", ".jpeg", ".png"], // Allow images
+            "application/pdf": [".pdf"], // Allow PDFs
+        },
     });
 
     const handleCloseSnackbar = () => {
@@ -77,17 +91,21 @@ const {
             const formattedDateBirth = data.dateBirth
             ? new Date(data.dateBirth) // Convert to Date object
             : null;
+
+            const referenceFileCount = data.referenceFiles?.length || 0;
             
             // Save additional user info in Firestore
-            await setDoc(doc(db, "parents", user.uid), {
+            await setDoc(doc(db, "sitters", user.uid), {
                 firstName: data.firstName || "",
                 lastName: data.lastName || "",
                 phone: data.phone || "",
                 dateBirth: formattedDateBirth,
                 email: data.email,
                 gender: data.gender || "",
-                family: data.family || "",
+                studies: data.studies || "",
+                experience: data.experience || "",
                 afm: data.afm || "",
+                referenceFiles: referenceFileCount,
             });
 
             navigate("/");
@@ -109,7 +127,7 @@ const {
             </Alert>
         </Snackbar>
         <Card style={{ maxWidth: 600, margin: "20px auto", padding: "10px" }}>
-        <CardHeader title="Εγγραφή Γονέα" />
+        <CardHeader title="Εγγραφή Νταντά" />
         <CardContent>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <FormControl fullWidth margin="normal" error={!!errors.profilePhoto}>
@@ -320,24 +338,91 @@ const {
                     <FormHelperText>{errors.gender?.message}</FormHelperText>
                 </FormControl>
 
-                <FormControl fullWidth margin="normal" error={!!errors.family}>
+                <FormControl fullWidth margin="normal" error={!!errors.studies}>
+                    <InputLabel>Σπουδές</InputLabel>
                     <Controller
-                    name="family"
+                    control={control}
+                    name="studies"
+                    rules={{
+                        required: "Οι σπουδές είναι υποχρεωτικές",
+                    }}
+                    render={({ field: { onChange, value } }) => (
+                        <Select
+                        labelId="option-select-label"
+                        value={value || ""}
+                        onChange={onChange}
+                        label="Σπουδές"
+                        >
+                            <MenuItem value="highSchool">Λύκειο</MenuItem>
+                            <MenuItem value="underGraduate">Προπτυχιακό</MenuItem>
+                            <MenuItem value="postGraduate">Μεταπτυχιακό</MenuItem>
+                        </Select>
+                    )}
+                    />
+                    <FormHelperText>{errors.studies?.message}</FormHelperText>
+                </FormControl>
+
+                <FormControl fullWidth margin="normal" error={!!errors.experience}>
+                    <Controller
+                    name="experience"
                     control={control}
                     defaultValue=""
-                    rules={{ required: "Περιγραφή οικογενείας είναι υποχρεωτική",}}
+                    rules={{ required: "Περιγραφή εμπειρίας είναι υποχρεωτική",}}
                     render={({ field }) => (
                         <TextField
                         {...field}
-                        label="Περιγραφή οικογενείας"
+                        label="Περιγραφή εμπειρίας"
                         variant="outlined"
                         multiline
                         rows={4}
-                        error={!!errors.family}
+                        error={!!errors.experience}
                     />
                     )}
                     />
-                    <FormHelperText>{errors.family?.message}</FormHelperText>
+                    <FormHelperText>{errors.experience?.message}</FormHelperText>
+                </FormControl>
+
+                <FormControl fullWidth margin="normal">
+                    <Typography variant="subtitle1" gutterBottom>
+                        Ανέβασε συστατικές επιστολές
+                    </Typography>
+                    <Controller
+                        name="referenceFiles"
+                        control={control}
+                        defaultValue={[]}
+                        render={({ field }) => (
+                        <Box
+                            {...referenceFilesDropzone.getRootProps()}
+                            sx={{
+                            border: "2px dashed",
+                            borderColor: referenceFilesDropzone.isDragActive
+                                ? "primary.main"
+                                : "grey.500",
+                            borderRadius: 1,
+                            padding: 2,
+                            textAlign: "center",
+                            cursor: "pointer",
+                            bgcolor: referenceFilesDropzone.isDragActive
+                                ? "grey.100"
+                                : "background.paper",
+                            }}
+                        >
+                            <input {...referenceFilesDropzone.getInputProps()} />
+                            <Typography>
+                            {referenceFiles.length > 0
+                                ? `${referenceFiles.length} αρχεία επιλεγμένα`
+                                : "Ανέβασε ή σείρε αρχεία εδώ (JPG, PNG, PDF)"}
+                            </Typography>
+                        </Box>
+                        )}
+                    />
+                    <List>
+                        {referenceFiles.map((file, index) => (
+                        <ListItem key={index}>
+                            <ListItemText primary={file.name} />
+                        </ListItem>
+                        ))}
+                    </List>
                 </FormControl>
 
                 <Button
@@ -356,4 +441,4 @@ const {
   );
 };
 
-export default RegisterSitter;
+export default EditSitter;

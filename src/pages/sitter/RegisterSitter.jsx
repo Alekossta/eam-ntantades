@@ -21,7 +21,7 @@ import {
   ListItemText
 } from "@mui/material";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth, db } from "../firebase"; // Import Firebase modules
+import { auth, db } from "../../firebase"; // Import Firebase modules
 import { setDoc, doc } from "firebase/firestore";
 import { DatePicker } from "@mui/x-date-pickers";
 import { useDropzone } from 'react-dropzone';
@@ -95,17 +95,19 @@ const {
             const referenceFileCount = data.referenceFiles?.length || 0;
             
             // Save additional user info in Firestore
-            await setDoc(doc(db, "sitters", user.uid), {
+            await setDoc(doc(db, "users", user.uid), {
                 firstName: data.firstName || "",
                 lastName: data.lastName || "",
                 phone: data.phone || "",
                 dateBirth: formattedDateBirth,
                 email: data.email,
                 gender: data.gender || "",
-                studies: data.studies || "",
-                experience: data.experience || "",
                 afm: data.afm || "",
-                referenceFiles: referenceFileCount,
+                sitter: {
+                    referenceFiles: referenceFileCount,
+                    experience: data.experience || "",
+                    studies: data.studies || "",
+                },
             });
 
             navigate("/");
