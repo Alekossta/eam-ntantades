@@ -14,15 +14,42 @@ import { getAuth } from 'firebase/auth';
 import { onAuthStateChanged } from 'firebase/auth';
 import { AppContext } from './appCtx';
 import Error from './pages/Error';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from './firebase';
 
+const UserType = {
+  SITTER: "sitter",
+  PARENT: "parent",
+  NOT_LOGGED_IN: "not_logged_in",
+};
 
 function App() {
   const [user, setUser] = useState(null);
+  const [userType, setUserType] = useState()
 
   useEffect(() => {
     const auth = getAuth();
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-        setUser(currentUser);
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      setUser(currentUser);
+      const foundUser = await getDoc(doc(db,"users", currentUser.uid));
+      if(foundUser)
+      {
+        console.log(foundUser);
+        if(foundUser.data().parent)
+        {
+          setUserType(UserType.PARENT);
+        }
+        else if(foundUser.data().sitter)
+        {
+          setUserType(UserType.SITTER);
+        }
+      }
+      else
+      {
+        setUserType(UserType.NOT_LOGGED_IN);
+      }
+
+
     });
 
     // Cleanup listener on unmount
@@ -37,7 +64,7 @@ function App() {
         minHeight: '100vh',
       }}
     >
-      <AppContext.Provider value={{user}}>
+      <AppContext.Provider value={{user, userType}}>
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />

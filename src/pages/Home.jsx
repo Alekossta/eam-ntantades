@@ -1,8 +1,10 @@
 import { Box, Typography, Button } from "@mui/material";
 import { Link } from "react-router-dom";
+import { useAppCtx } from "../appCtx";
 
 export default function Home()
 {
+    const {user, userType} = useAppCtx();
     return <Box sx={{width:"100%", height: "100%"}}>
         <Box
             sx={{
@@ -32,7 +34,7 @@ export default function Home()
             
             >
                 <Typography variant="h1" color="white" sx={{marginY: "2rem"}}>
-                    ΝΤΑΝΤΑΔΕΣ
+                    ΝΤΑΝΤΑΔΕΣ {userType}
                 </Typography>
                 <Typography color="white" fontSize={"2em"} textAlign={"center"}>
                     Η πλατφόρμα που ταιριάζει τον καταλληλο γονέα στην κατάληλλη νταντά
