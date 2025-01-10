@@ -24,22 +24,22 @@ export default function Home()
                     backgroundColor: "rgba(0,0,0,0.8)",
                     marginTop: "2rem",
                     width: "60%",
-                    height: "50vh",
+                    minHeight: "40vh",
+                    maxHeight: "55vh",
                     borderRadius: "30px",
                     display: "flex",
                     alignItems: "center",
                     flexDirection: "column",
                     padding: "1rem"
                 }}
-            
             >
                 <Typography variant="h1" color="white" sx={{marginY: "2rem"}}>
-                    ΝΤΑΝΤΑΔΕΣ {userType}
+                    ΝΤΑΝΤΑΔΕΣ
                 </Typography>
                 <Typography color="white" fontSize={"2em"} textAlign={"center"}>
                     Η πλατφόρμα που ταιριάζει τον καταλληλο γονέα στην κατάληλλη νταντά
                 </Typography>
-                <Box sx={{width:"50%", height: "4rem", display: "flex", justifyContent: "space-between", marginTop: "3rem"}}>
+                <Box sx={{width:"50%", height: "5vh", display: "flex", justifyContent: "space-between", marginTop: "3rem"}}>
                     <Button
                         component={Link}
                         to="/parent/register"
