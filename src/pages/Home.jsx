@@ -39,25 +39,54 @@ export default function Home()
                 <Typography color="white" fontSize={"2em"} textAlign={"center"}>
                     Η πλατφόρμα που ταιριάζει τον καταλληλο γονέα στην κατάληλλη νταντά
                 </Typography>
-                <Box sx={{width:"50%", height: "5vh", display: "flex", justifyContent: "space-between", marginTop: "3rem"}}>
-                    <Button
-                        component={Link}
-                        to="/parent/register"
-                        color="secondary"
-                        variant="contained"
-                        size="large"
-                    >
-                        Είμαι Γονέας
-                    </Button>
-                    <Button
-                        component={Link}
-                        to="/sitter/register"
-                        color="secondary"
-                        variant="contained"
-                        size="large"
-                    >
-                        Είμαι Νταντά
-                    </Button>
+                <Box sx={{width:"100%", height: "5vh", display: "flex", justifyContent: "space-around", marginTop: "3rem"}}>
+                    {
+                        userType == "not_logged_in" &&
+                        <>
+                            <Button
+                                component={Link}
+                                to="/parent/register"
+                                color="secondary"
+                                variant="contained"
+                                size="large"
+                            >
+                                Είμαι Γονέας
+                            </Button>
+                            <Button
+                                component={Link}
+                                to="/sitter/register"
+                                color="secondary"
+                                variant="contained"
+                                size="large"
+                            >
+                                Είμαι Νταντά
+                            </Button>
+                        </>
+                    }
+                    {
+                        userType == "sitter" &&
+                        <Button
+                            component={Link}
+                            to="/sitter/ad-create"
+                            color="secondary"
+                            variant="contained"
+                            size="large"
+                        >
+                            Φτιάξε αγγελία
+                        </Button>
+                    }
+                    {
+                        userType == "parent" &&
+                        <Button
+                            component={Link}
+                            to="/parent/register"
+                            color="secondary"
+                            variant="contained"
+                            size="large"
+                        >
+                            Ψάξε αγγελίες
+                        </Button>
+                    }
                 </Box>
             </Box>
         </Box>

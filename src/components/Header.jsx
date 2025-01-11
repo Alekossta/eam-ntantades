@@ -11,8 +11,6 @@ function Header() {
   const {user} = useAppCtx();
   const [anchorEl, setAnchorEl] = useState(null);
 
-  console.log(user);
-
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };

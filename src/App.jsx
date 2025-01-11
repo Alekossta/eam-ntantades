@@ -1,5 +1,5 @@
-import React, { createContext, useState, useEffect } from 'react';
-import { Container, Box } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Box } from '@mui/material';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import { Routes, Route } from 'react-router-dom';
@@ -16,6 +16,7 @@ import { AppContext } from './appCtx';
 import Error from './pages/Error';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from './firebase';
+import AdCreate from './pages/sitter/AdCreate';
 
 const UserType = {
   SITTER: "sitter",
@@ -25,7 +26,7 @@ const UserType = {
 
 function App() {
   const [user, setUser] = useState(null);
-  const [userType, setUserType] = useState()
+  const [userType, setUserType] = useState(UserType.NOT_LOGGED_IN)
 
   useEffect(() => {
     const auth = getAuth();
@@ -34,7 +35,6 @@ function App() {
       const foundUser = await getDoc(doc(db,"users", currentUser.uid));
       if(foundUser)
       {
-        console.log(foundUser);
         if(foundUser.data().parent)
         {
           setUserType(UserType.PARENT);
@@ -74,7 +74,14 @@ function App() {
             <Route path="/parent/register" element={<RegisterParent />} />
             <Route path="/sitter/register" element={<RegisterSitter />} />  
           </>}
-          <Route path="/sitter/edit" element={<EditSitter/>}/>
+          {
+            userType == "sitter" &&
+            <>
+              <Route path="/sitter/edit" element={<EditSitter/>}/>
+              <Route path="/sitter/ad-create" element={<AdCreate/>}/>            
+            </>
+          }
+
           <Route path="/parent/edit" element={<EditParent/>}/>
           <Route path="*" element={<Error/>} />
         </Routes>
