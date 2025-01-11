@@ -98,7 +98,7 @@ export default function AdCreate()
                 }
             }
     
-            await addDoc(collection(db, "ads"), {owner: user.uid, processedData});
+            await addDoc(collection(db, "ads"), {owner: user.uid, ...processedData});
         } 
         catch(e)
         {

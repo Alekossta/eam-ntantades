@@ -17,6 +17,7 @@ import Error from './pages/Error';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from './firebase';
 import AdCreate from './pages/sitter/AdCreate';
+import Ads from './pages/sitter/Ads';
 
 const UserType = {
   SITTER: "sitter",
@@ -78,7 +79,8 @@ function App() {
             userType == "sitter" &&
             <>
               <Route path="/sitter/edit" element={<EditSitter/>}/>
-              <Route path="/sitter/ad-create" element={<AdCreate/>}/>            
+              <Route path="/sitter/ad-create" element={<AdCreate/>}/>
+              <Route path="/sitter/ads" element={<Ads/>}/>
             </>
           }
 

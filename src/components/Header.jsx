@@ -8,7 +8,7 @@ import { useAppCtx } from '../appCtx';
 
 function Header() {
   const navigate = useNavigate();
-  const {user} = useAppCtx();
+  const {user, userType} = useAppCtx();
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event) => {
@@ -48,6 +48,15 @@ function Header() {
           {user ? (
               // If the user is logged in
               <>
+                  {userType == "sitter" &&
+                    <Button
+                      component={Link}
+                      to="/sitter/ads"
+                      color="inherit"
+                    >
+                      Αγγέλιες
+                    </Button>
+                  }
                   <Button
                     color="inherit"
                     onClick={handleClick}
