@@ -70,7 +70,8 @@ function Header() {
                     open={Boolean(anchorEl)}
                     onClose={handleClose}
                   >
-                    <MenuItem component={Link} to="/link1" onClick={handleClose}>
+                    <MenuItem component={Link} to={userType=="sitter" ? "/sitter/edit" : "/parent/edit"}
+                     onClick={handleClose}>
                       ΠΡΟΦΙΛ
                     </MenuItem>
                     <MenuItem component={Button} to="/link2" onClick={handleLogout}>

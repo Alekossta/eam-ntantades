@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useAppCtx } from "../../appCtx";
 import { getFirestore, collection, query, where, getDocs } from "firebase/firestore";
@@ -33,7 +33,10 @@ export default function Ads()
 
     }, [])
 
-    return <Box sx={{display:"flex", justifyContent:"center"}}>
+    return <Box sx={{display:"flex", flexDirection: "column", justifyContent:"center", alignItems: "center"}}>
+        <Typography variant="h2" sx={{marginY: "2rem"}}>
+            Οι αγγελίες σου
+        </Typography>
         {ads.map((el) => {
             return <Ad key={el.id} ad={el}/>
         })}

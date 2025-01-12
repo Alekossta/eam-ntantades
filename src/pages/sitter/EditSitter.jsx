@@ -22,10 +22,12 @@ import {
 } from "@mui/material";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../firebase"; // Import Firebase modules
-import { setDoc, doc } from "firebase/firestore";
+import { setDoc, doc, getDoc } from "firebase/firestore";
 import { DatePicker } from "@mui/x-date-pickers";
 import { useDropzone } from 'react-dropzone';
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useAppCtx } from "../../appCtx";
 
 const EditSitter = () => {
 const {
@@ -44,6 +46,8 @@ const {
     const [snackbarOpen, setSnackbarOpen] = useState(false);
 
     const navigate = useNavigate();
+
+    const {user} = useAppCtx();
 
     // Handlers for drop zones
     const onDropProfilePhoto = (acceptedFiles) => {
@@ -75,6 +79,42 @@ const {
     const handleCloseSnackbar = () => {
         setSnackbarOpen(false);
     };
+
+    useEffect(() => {
+        const getUser = async () => 
+        {
+            try 
+            {
+                // Reference the document in Firestore
+                const sitterDocRef = doc(db, "users", user.uid);
+            
+                // Fetch the document
+                const sitterDoc = await getDoc(sitterDocRef);
+            
+                if (sitterDoc.exists()) {
+                    // Document data
+                    const data = sitterDoc.data();
+                    console.log("Document data:", data);
+                    setValue("firstName", data.firstName);
+                    setValue("lastName", data.lastName);
+                    setValue("afm", data.afm);
+                    setValue("phone", data.phone);
+                    setValue("dateBirth", data.dateBirth.toDate());
+                    return data;
+                } else {
+                    console.log("No such document!");
+                    return null;
+                }
+            } 
+            catch (error) 
+            {
+                console.error("Error fetching document:", error);
+                throw error;
+            }
+        }
+
+        getUser();
+    }, [])
 
     const onSubmit = async (data) => {
         console.log(data);
@@ -168,46 +208,6 @@ const {
                         )}
                     />
                     <FormHelperText>{errors.profilePhoto?.message}</FormHelperText>
-                </FormControl>
-                <FormControl fullWidth margin="normal" error={!!errors.email}>
-                    <Controller
-                    name="email"
-                    control={control}
-                    defaultValue=""
-                    rules={{ required: "Email is required",
-                        pattern: {
-                            value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-                            message: "Invalid email address",
-                        },
-                    }}
-                    render={({ field }) => (
-                        <TextField {...field} label="Email" variant="outlined" error={!!errors.email}
-                        />
-                    )}
-                    />
-                    <FormHelperText>{errors.email?.message}</FormHelperText>
-                </FormControl>
-
-                <FormControl fullWidth margin="normal" error={!!errors.password}>
-                    <Controller
-                    name="password"
-                    control={control}
-                    defaultValue=""
-                    rules={{
-                        required: "Password is required",
-                        minLength: { value: 6, message: "Minimum 6 characters" },
-                    }}
-                    render={({ field }) => (
-                        <TextField
-                        {...field}
-                        label="Password"
-                        type="password"
-                        variant="outlined"
-                        error={!!errors.password}
-                        />
-                    )}
-                    />
-                    <FormHelperText>{errors.password?.message}</FormHelperText>
                 </FormControl>
 
                 <FormControl fullWidth margin="normal" error={!!errors.firstName}>

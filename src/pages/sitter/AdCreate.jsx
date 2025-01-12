@@ -20,6 +20,7 @@ import { useState } from "react";
 import { db } from "../../firebase";
 import { Timestamp, addDoc, collection } from "firebase/firestore";
 import { useAppCtx } from "../../appCtx";
+import { useNavigate } from "react-router-dom";
 
 const days = [
     "Δευτέρα",
@@ -75,6 +76,8 @@ export default function AdCreate()
         formState: { errors },
     } = useForm();
 
+    const navigate = useNavigate();
+
     const onSubmit = async (data) => {
         try
         {
@@ -99,6 +102,8 @@ export default function AdCreate()
             }
     
             await addDoc(collection(db, "ads"), {owner: user.uid, ...processedData});
+
+            navigate("/sitter/ads");
         } 
         catch(e)
         {
