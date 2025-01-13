@@ -16,8 +16,10 @@ import { AppContext } from './appCtx';
 import Error from './pages/Error';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from './firebase';
-import AdCreate from './pages/sitter/AdCreate';
-import Ads from './pages/sitter/Ads';
+import AdCreate from './pages/sitter/ad/AdCreate';
+import Ads from './pages/sitter/ad/Ads';
+import AdEdit from './pages/sitter/ad/AdEdit';
+import SearchAds from './pages/parent/SearchAds';
 
 const UserType = {
   SITTER: "sitter",
@@ -81,10 +83,16 @@ function App() {
               <Route path="/sitter/edit" element={<EditSitter/>}/>
               <Route path="/sitter/ad-create" element={<AdCreate/>}/>
               <Route path="/sitter/ads" element={<Ads/>}/>
+              <Route path="/sitter/ad/edit/:id" element={<AdEdit/>}/>
             </>
           }
-
-          <Route path="/parent/edit" element={<EditParent/>}/>
+          {
+            userType == "parent" &&
+            <>
+              <Route path="/parent/edit" element={<EditParent/>}/>
+              <Route path="/parent/search" element={<SearchAds/>}/>
+            </>
+          }
           <Route path="*" element={<Error/>} />
         </Routes>
         <Footer />

@@ -1,9 +1,9 @@
 import { Box, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useAppCtx } from "../../appCtx";
-import { getFirestore, collection, query, where, getDocs } from "firebase/firestore";
-import Ad from "../../components/Ad";
-import { db } from "../../firebase";
+import { useAppCtx } from "../../../appCtx";
+import {collection, query, where, getDocs } from "firebase/firestore";
+import Ad from "../../../components/Ad";
+import { db } from "../../../firebase";
 
 export default function Ads()
 {
@@ -37,8 +37,25 @@ export default function Ads()
         <Typography variant="h2" sx={{marginY: "2rem"}}>
             Οι αγγελίες σου
         </Typography>
+        <Typography variant="h3" sx={{marginY: "2rem"}}>
+            Δημοσιευμένες
+        </Typography>
         {ads.map((el) => {
-            return <Ad key={el.id} ad={el}/>
+            if(el.isPublished)
+            {
+                return <Ad key={el.id} ad={el}/>
+            }
+
+        })}
+        <Typography variant="h3" sx={{marginY: "2rem"}}>
+            Αποθηκευμένες
+        </Typography>
+        {ads.map((el) => {
+            if(!(el.isPublished))
+            {
+                return <Ad key={el.id} ad={el} canEdit={true}/>
+            }
+
         })}
     </Box>
 }

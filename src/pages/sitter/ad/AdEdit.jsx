@@ -16,11 +16,14 @@ import {
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import { useState } from "react";
-import { db } from "../../firebase";
-import { Timestamp, addDoc, collection } from "firebase/firestore";
-import { useAppCtx } from "../../appCtx";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { db } from "../../../firebase";
+import { Timestamp, addDoc, collection, updateDoc } from "firebase/firestore";
+import { useAppCtx } from "../../../appCtx";
+import { data, useNavigate, useParams } from "react-router-dom";
+import { doc, getDoc } from "firebase/firestore";
+import dayjs from "dayjs";
+import { dayTranslations } from "../../../translations";
 
 const days = [
     "Δευτέρα",
@@ -63,7 +66,12 @@ function processWorkSchedule(schedule) {
     return translatedSchedule;
 }
 
-export default function AdCreate()
+const timeStampToDayJS = (timestamp) => {
+    const milliseconds = timestamp.seconds * 1000;
+    return dayjs(milliseconds);
+}
+
+export default function AdEdit()
 {
     const {user} = useAppCtx();
 
@@ -77,8 +85,53 @@ export default function AdCreate()
     } = useForm();
 
     const navigate = useNavigate();
+    const { id } = useParams();
 
-    const onSubmit = async (data) => {
+
+    useEffect(() => {
+        const getUser = async () => 
+        {
+            try 
+            {
+                // Reference the document in Firestore
+                const adRef = doc(db, "ads", id);
+            
+                // Fetch the document
+                const adDoc = await getDoc(adRef);
+            
+                if (adDoc.exists()) 
+                {
+                    // Document data
+                    const data = adDoc.data();
+                    console.log(data);
+                    setValue("workType", data.worktype);
+                    setValue("location", data.location);
+                    
+                    for(const day of days)
+                    {
+                        if(data[dayTranslations[day]])
+                        {
+                            setValue(`${day}.startTime`, timeStampToDayJS(data[dayTranslations[day]].startTime));
+                            setValue(`${day}.endTime`, timeStampToDayJS(data[dayTranslations[day]].endTime));
+                        }
+                    }
+
+                } 
+                else {
+                    console.log("No such document!");
+                }
+            } 
+            catch (error) 
+            {
+                console.error("Error fetching document:", error);
+                throw error;
+            }
+        }
+
+        getUser();
+    }, [])
+
+    const onSubmit = async (data, isPublished) => {
         try
         {
             const processedData = processWorkSchedule(data);
@@ -101,7 +154,7 @@ export default function AdCreate()
                 }
             }
     
-            await addDoc(collection(db, "ads"), {owner: user.uid, ...processedData});
+            await updateDoc(doc(db, "ads", id), {owner: user.uid, isPublished, ...processedData});
 
             navigate("/sitter/ads");
         } 
@@ -241,15 +294,24 @@ export default function AdCreate()
                         );
                     })}
 
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        color="primary"
-                        fullWidth
-                        style={{ marginTop: "16px" }}
-                    >
-                        Submit
-                    </Button>
+                    <Box display="flex" gap="16px" marginTop="16px">
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                fullWidth
+                                onClick={handleSubmit((data) => onSubmit(data, true))}
+                            >
+                                Submit
+                            </Button>
+                            <Button
+                                variant="outlined"
+                                color="secondary"
+                                fullWidth
+                                onClick={handleSubmit((data) => onSubmit(data, false))}
+                            >
+                                Save as Draft
+                            </Button>
+                    </Box>
                 </form>
             </CardContent>
         </Card>

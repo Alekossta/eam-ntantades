@@ -79,7 +79,7 @@ export default function Home()
                         userType == "parent" &&
                         <Button
                             component={Link}
-                            to="/parent/register"
+                            to="/parent/search"
                             color="secondary"
                             variant="contained"
                             size="large"

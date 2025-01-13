@@ -1,7 +1,8 @@
-import { Card, CardContent, CardHeader, Typography } from "@mui/material";
+import { Button, Card, CardActions, CardContent, CardHeader, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { db } from "../firebase";
 import { collection, getDocs, limit, query, where } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
 const days = [
     "Δευτέρα",
@@ -23,9 +24,10 @@ const dayTranslations = {
     'Κυριακή': 'sunday',
 };
 
-export default function Ad({ad})
+export default function Ad({ad, canEdit, canShowInterest})
 {
     const [ownerUser, setOwnerUser] = useState();
+    const navigate = useNavigate();
     useEffect(() => {
         const getOwnerUser = async () => {
             const q = query(collection(db, "users"), where("__name__", "==", ad.owner), limit(1));
@@ -49,6 +51,15 @@ export default function Ad({ad})
         getOwnerUser();
 
     }, []);
+
+    const editButtonClicked = () => {
+        navigate("/sitter/ad/edit/" + ad.id);
+    };
+
+    const showInterestButtonClicked = () => {
+        navigate("/parent/createInterestFor/" + ad.id);
+    }
+
     return (<Card sx={{width:"50%", marginY:"1rem"}}>
         <CardHeader title="Αγγελία"/>
         <CardContent>
@@ -94,5 +105,23 @@ export default function Ad({ad})
                 </Typography>
             </CardContent>
         }
+        {canEdit && <CardActions
+        sx={{
+          justifyContent: "flex-end", // Aligns the buttons to the right
+        }}
+        >
+            <Button size="medium" variant="contained" color="secondary" onClick={editButtonClicked}>
+                Edit
+            </Button>
+        </CardActions>}
+        {canShowInterest && <CardActions
+        sx={{
+          justifyContent: "flex-end", // Aligns the buttons to the right
+        }}
+        >
+            <Button size="medium" variant="contained" color="secondary" onClick={showInterestButtonClicked}>
+                Show Interest
+            </Button>
+        </CardActions>}
     </Card>)
 }
