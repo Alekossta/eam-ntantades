@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import {
@@ -22,12 +22,14 @@ import {
 } from "@mui/material";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../firebase"; // Import Firebase modules
-import { setDoc, doc } from "firebase/firestore";
+import { setDoc, doc, getDoc, updateDoc } from "firebase/firestore";
 import { DatePicker } from "@mui/x-date-pickers";
 import { useDropzone } from 'react-dropzone';
 import { useNavigate } from "react-router-dom";
+import { useAppCtx } from "../../appCtx";
+import dayjs from "dayjs";
 
-const EditParent = () => {
+const RegisterParent = () => {
 const {
     handleSubmit,
     control,
@@ -43,6 +45,8 @@ const {
     const [snackbarOpen, setSnackbarOpen] = useState(false);
 
     const navigate = useNavigate();
+
+    const {user} = useAppCtx();
 
     // Handlers for drop zones
     const onDropProfilePhoto = (acceptedFiles) => {
@@ -62,16 +66,53 @@ const {
         setSnackbarOpen(false);
     };
 
+
+    useEffect(() => {
+        const getUser = async () => 
+        {
+            try 
+            {
+                // Reference the document in Firestore
+                const parentDocRef = doc(db, "users", user.uid);
+            
+                // Fetch the document
+                const parentDoc = await getDoc(parentDocRef);
+            
+                if (parentDoc.exists()) {
+                    // Document data
+                    const data = parentDoc.data();
+                    setValue("firstName", data.firstName);
+                    setValue("lastName", data.lastName);
+                    setValue("afm", data.afm);
+                    setValue("phone", data.phone);
+
+                    // Convert to milliseconds
+                    const milliseconds = data.dateBirth.seconds * 1000;
+                    // Create a Day.js object
+                    const dayjsObject = dayjs(milliseconds);
+                    setValue("dateBirth", dayjsObject);
+
+                    setValue("gender", data.gender);
+                    setValue("family", data.parent.family);
+                    return data;
+                } else {
+                    console.log("No such document!");
+                    return null;
+                }
+            } 
+            catch (error) 
+            {
+                console.error("Error fetching document:", error);
+                throw error;
+            }
+        }
+
+        getUser();
+    }, [user])
+
     const onSubmit = async (data) => {
-        console.log(data);
         // Process form submission
         try {
-            const userCredentials = await createUserWithEmailAndPassword(
-                auth,
-                data.email,
-                data.password
-            )
-            const user = userCredentials.user;
 
             // Convert dateBirth to a Firestore-compatible format (Date object or ISO string)
             const formattedDateBirth = data.dateBirth
@@ -79,15 +120,17 @@ const {
             : null;
             
             // Save additional user info in Firestore
-            await setDoc(doc(db, "parents", user.uid), {
+            await updateDoc(doc(db, "users", user.uid), {
                 firstName: data.firstName || "",
                 lastName: data.lastName || "",
                 phone: data.phone || "",
                 dateBirth: formattedDateBirth,
-                email: data.email,
                 gender: data.gender || "",
-                family: data.family || "",
                 afm: data.afm || "",
+                parent:
+                {
+                    family: data.family || "",
+                }
             });
 
             navigate("/");
@@ -114,15 +157,12 @@ const {
             <form onSubmit={handleSubmit(onSubmit)}>
                 <FormControl fullWidth margin="normal" error={!!errors.profilePhoto}>
                     <Typography variant="subtitle1" gutterBottom>
-                        Ανέβασε φωτογραφία προφίλ
+                        Ανέβασε νεα φωτογραφία προφίλ
                     </Typography>
                     <Controller
                         name="profilePhoto"
                         control={control}
                         defaultValue={null}
-                        rules={{
-                        required: "Η φωτογραφία είναι υποχρεωτική",
-                        }}
                         render={({ field }) => (
                         <Box
                             {...profilePhotoDropzone.getRootProps()}
@@ -150,46 +190,6 @@ const {
                         )}
                     />
                     <FormHelperText>{errors.profilePhoto?.message}</FormHelperText>
-                </FormControl>
-                <FormControl fullWidth margin="normal" error={!!errors.email}>
-                    <Controller
-                    name="email"
-                    control={control}
-                    defaultValue=""
-                    rules={{ required: "Email is required",
-                        pattern: {
-                            value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-                            message: "Invalid email address",
-                        },
-                    }}
-                    render={({ field }) => (
-                        <TextField {...field} label="Email" variant="outlined" error={!!errors.email}
-                        />
-                    )}
-                    />
-                    <FormHelperText>{errors.email?.message}</FormHelperText>
-                </FormControl>
-
-                <FormControl fullWidth margin="normal" error={!!errors.password}>
-                    <Controller
-                    name="password"
-                    control={control}
-                    defaultValue=""
-                    rules={{
-                        required: "Password is required",
-                        minLength: { value: 6, message: "Minimum 6 characters" },
-                    }}
-                    render={({ field }) => (
-                        <TextField
-                        {...field}
-                        label="Password"
-                        type="password"
-                        variant="outlined"
-                        error={!!errors.password}
-                        />
-                    )}
-                    />
-                    <FormHelperText>{errors.password?.message}</FormHelperText>
                 </FormControl>
 
                 <FormControl fullWidth margin="normal" error={!!errors.firstName}>
@@ -347,7 +347,7 @@ const {
                     fullWidth
                     style={{ marginTop: "16px" }}
                 >
-                    Submit
+                    Update
                 </Button>
             </form>
         </CardContent>
@@ -356,4 +356,4 @@ const {
   );
 };
 
-export default EditParent;
+export default RegisterParent;

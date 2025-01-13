@@ -22,7 +22,7 @@ import {
 } from "@mui/material";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../firebase"; // Import Firebase modules
-import { setDoc, doc, getDoc } from "firebase/firestore";
+import { setDoc, doc, getDoc, updateDoc } from "firebase/firestore";
 import { DatePicker } from "@mui/x-date-pickers";
 import { useDropzone } from 'react-dropzone';
 import { useNavigate } from "react-router-dom";
@@ -95,17 +95,21 @@ const {
                 if (sitterDoc.exists()) {
                     // Document data
                     const data = sitterDoc.data();
-                    console.log("Document data:", data);
                     setValue("firstName", data.firstName);
                     setValue("lastName", data.lastName);
                     setValue("afm", data.afm);
                     setValue("phone", data.phone);
+
                     // Convert to milliseconds
                     const milliseconds = data.dateBirth.seconds * 1000;
-
                     // Create a Day.js object
                     const dayjsObject = dayjs(milliseconds);
                     setValue("dateBirth", dayjsObject);
+
+                    setValue("gender", data.gender);
+                    setValue("studies", data.sitter.studies);
+                    setValue("experience", data.sitter.experience);
+
                     return data;
                 } else {
                     console.log("No such document!");
@@ -123,16 +127,7 @@ const {
     }, [])
 
     const onSubmit = async (data) => {
-        console.log(data);
-        // Process form submission
         try {
-            const userCredentials = await createUserWithEmailAndPassword(
-                auth,
-                data.email,
-                data.password
-            )
-            const user = userCredentials.user;
-
             // Convert dateBirth to a Firestore-compatible format (Date object or ISO string)
             const formattedDateBirth = data.dateBirth
             ? new Date(data.dateBirth) // Convert to Date object
@@ -141,12 +136,11 @@ const {
             const referenceFileCount = data.referenceFiles?.length || 0;
             
             // Save additional user info in Firestore
-            await setDoc(doc(db, "sitters", user.uid), {
+            await updateDoc(doc(db, "users", user.uid), {
                 firstName: data.firstName || "",
                 lastName: data.lastName || "",
                 phone: data.phone || "",
                 dateBirth: formattedDateBirth,
-                email: data.email,
                 gender: data.gender || "",
                 studies: data.studies || "",
                 experience: data.experience || "",
@@ -173,20 +167,17 @@ const {
             </Alert>
         </Snackbar>
         <Card style={{ maxWidth: 600, margin: "20px auto", padding: "10px" }}>
-        <CardHeader title="Εγγραφή Νταντά" />
+        <CardHeader title="Ενήμερωση Προφίλ Νταντάς" />
         <CardContent>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <FormControl fullWidth margin="normal" error={!!errors.profilePhoto}>
                     <Typography variant="subtitle1" gutterBottom>
-                        Ανέβασε φωτογραφία προφίλ
+                        Ανέβασε νεα φωτογραφία προφίλ
                     </Typography>
                     <Controller
                         name="profilePhoto"
                         control={control}
                         defaultValue={null}
-                        rules={{
-                        required: "Η φωτογραφία είναι υποχρεωτική",
-                        }}
                         render={({ field }) => (
                         <Box
                             {...profilePhotoDropzone.getRootProps()}
@@ -438,7 +429,7 @@ const {
                     fullWidth
                     style={{ marginTop: "16px" }}
                 >
-                    Submit
+                    Update
                 </Button>
             </form>
         </CardContent>
