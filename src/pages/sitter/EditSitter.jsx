@@ -28,6 +28,7 @@ import { useDropzone } from 'react-dropzone';
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useAppCtx } from "../../appCtx";
+import dayjs from "dayjs";
 
 const EditSitter = () => {
 const {
@@ -99,7 +100,12 @@ const {
                     setValue("lastName", data.lastName);
                     setValue("afm", data.afm);
                     setValue("phone", data.phone);
-                    setValue("dateBirth", data.dateBirth.toDate());
+                    // Convert to milliseconds
+                    const milliseconds = data.dateBirth.seconds * 1000;
+
+                    // Create a Day.js object
+                    const dayjsObject = dayjs(milliseconds);
+                    setValue("dateBirth", dayjsObject);
                     return data;
                 } else {
                     console.log("No such document!");
