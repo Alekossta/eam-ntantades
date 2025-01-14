@@ -2,15 +2,16 @@ import { Box, Button, Card, CardContent, CardHeader, FormControl, FormHelperText
 import { useNavigate, useParams } from "react-router-dom";
 import Ad from "../../components/Ad";
 import { useEffect, useState } from "react";
-import { addDoc, collection, doc, getDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 import { Controller, useForm } from "react-hook-form";
 import { useAppCtx } from "../../appCtx";
 
-export default function CreateInterestFor()
+export default function EditInterestFor()
 {
     const {id} = useParams();
     const [ad, setAd] = useState();
+    const [adID, setAdId] = useState();
 
     const {
         handleSubmit,
@@ -25,12 +26,28 @@ export default function CreateInterestFor()
     const navigate = useNavigate();
 
     useEffect(() => {
-
+        const fetchInterest = async () => {
+            try
+            {
+                const fetchedInterest = await getDoc(doc(db, "interests", id));
+                const data = fetchedInterest.data();
+                setAdId(data.ad);
+                setValue("description",data.description);
+            }
+            catch(e)
+            {
+                console.log(e);
+            }
+        }
         const fetchAd = async () => {
             try
             {
-                const fetchedAd = await getDoc(doc(db, "ads", id));
-                setAd({id: fetchedAd.id, ...(fetchedAd.data())});
+                if(adID)
+                {
+                    const fetchedAd = await getDoc(doc(db, "ads", adID));
+                    setAd(fetchedAd.data());
+                }
+
             }
             catch(e)
             {
@@ -38,11 +55,17 @@ export default function CreateInterestFor()
             }
         }
 
-        fetchAd();
-    }, [])
+        const wrapper = async () =>
+        {
+            await fetchInterest();
+            await fetchAd();
+        }
+
+        wrapper();
+    }, [adID])
 
     const onSubmit = async (data, isPublished) => {
-        await addDoc(collection(db, "interests"), {proposer: user.uid, recipient: ad.owner, ad: ad.id,isPublished,  ...data});
+        await updateDoc(doc(db, "interests", id), {isPublished,  ...data});
         navigate("/parent/interests");
     }
 

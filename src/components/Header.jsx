@@ -49,12 +49,30 @@ function Header() {
               // If the user is logged in
               <>
                   {userType == "sitter" &&
+                  <>
+                    <Button
+                      component={Link}
+                      to="/sitter/interests"
+                      color="inherit"
+                    >
+                      ΕΝΔΙΑΦΕΡΟΝΤΑ
+                    </Button>
                     <Button
                       component={Link}
                       to="/sitter/ads"
                       color="inherit"
                     >
-                      Αγγέλιες
+                      ΑΓΓΕΛΙΕΣ
+                    </Button>
+                  </>
+                  }
+                  {userType == "parent" &&
+                    <Button
+                      component={Link}
+                      to="/parent/interests"
+                      color="inherit"
+                    >
+                      Ενδιαφεροντα
                     </Button>
                   }
                   <Button

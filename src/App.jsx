@@ -20,6 +20,10 @@ import AdCreate from './pages/sitter/ad/AdCreate';
 import Ads from './pages/sitter/ad/Ads';
 import AdEdit from './pages/sitter/ad/AdEdit';
 import SearchAds from './pages/parent/SearchAds';
+import CreateInterestFor from './pages/parent/CreateInterestFor';
+import InterestsParent from './pages/parent/InterestsParent';
+import EditInterestFor from './pages/parent/EditInterestFor';
+import InterestsSitter from './pages/sitter/InterestsSitter';
 
 const UserType = {
   SITTER: "sitter",
@@ -84,6 +88,7 @@ function App() {
               <Route path="/sitter/ad-create" element={<AdCreate/>}/>
               <Route path="/sitter/ads" element={<Ads/>}/>
               <Route path="/sitter/ad/edit/:id" element={<AdEdit/>}/>
+              <Route path="/sitter/interests" element={<InterestsSitter/>}/>
             </>
           }
           {
@@ -91,6 +96,9 @@ function App() {
             <>
               <Route path="/parent/edit" element={<EditParent/>}/>
               <Route path="/parent/search" element={<SearchAds/>}/>
+              <Route path="/parent/interests" element={<InterestsParent/>}/>
+              <Route path="/parent/createInterestFor/:id" element={<CreateInterestFor/>}/>
+              <Route path="/parent/interest/edit/:id" element={<EditInterestFor/>}/>
             </>
           }
           <Route path="*" element={<Error/>} />

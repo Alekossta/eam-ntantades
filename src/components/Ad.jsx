@@ -64,7 +64,7 @@ export default function Ad({ad, canEdit, canShowInterest})
         <CardHeader title="Αγγελία"/>
         <CardContent>
             <Typography>
-                Τοποθεσία: {ad.location} 
+                Τοποθεσία: {ad.location || ""} 
             </Typography>
             <Typography>
                 Τύπος Απασχόλησης: {ad.worktype} 
