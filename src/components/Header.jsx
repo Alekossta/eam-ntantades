@@ -48,15 +48,15 @@ function Header() {
           {user ? (
               // If the user is logged in
               <>
+                  <Button
+                    component={Link}
+                    to="/agreements"
+                    color="inherit"
+                  >
+                    ΣΥΜΦΩΝΙΕΣ
+                  </Button> 
                   {userType == "sitter" &&
                   <>
-                    <Button
-                      component={Link}
-                      to="/sitter/agreements"
-                      color="inherit"
-                    >
-                      ΣΥΜΦΩΝΙΕΣ
-                    </Button>
                     <Button
                       component={Link}
                       to="/sitter/interests"
@@ -74,14 +74,7 @@ function Header() {
                   </>
                   }
                   {userType == "parent" &&
-                    <>
-                      <Button
-                        component={Link}
-                        to="/parent/agreements"
-                        color="inherit"
-                      >
-                        ΣΥΜΦΩΝΙΕΣ
-                      </Button>                   
+                    <>                  
                       <Button
                         component={Link}
                         to="/parent/interests"
@@ -114,7 +107,6 @@ function Header() {
                   </Menu>
               </>
           ) : (
-              // If the user is not logged in
               <>
                   <Button
                       color="inherit"

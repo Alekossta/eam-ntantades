@@ -2,7 +2,7 @@ import { Button, Card, CardActions, CardContent, CardHeader, Typography } from "
 import { useNavigate } from "react-router-dom";
 import { useAppCtx } from "../appCtx";
 import { db } from "../firebase";
-import {addDoc, collection, deleteDoc, doc, updateDoc } from "firebase/firestore";
+import {addDoc, collection, deleteDoc, doc, serverTimestamp, updateDoc } from "firebase/firestore";
 
 const countSignatures = (signatures) => {
   return Object.values(signatures).filter(Boolean).length;
@@ -67,6 +67,7 @@ export default function Interest({interest, canEdit, showActions, fetchInterests
             sitter: interest.recipient,
             parent: interest.proposer,
             ad: interest.ad,
+            startedAt: serverTimestamp()
           });
           const interestRef = doc(db, "interests", interest.id);
           await deleteDoc(interestRef);
