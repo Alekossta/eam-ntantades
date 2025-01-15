@@ -24,6 +24,8 @@ import CreateInterestFor from './pages/parent/CreateInterestFor';
 import InterestsParent from './pages/parent/InterestsParent';
 import EditInterestFor from './pages/parent/EditInterestFor';
 import InterestsSitter from './pages/sitter/InterestsSitter';
+import AgreementsParent from './pages/parent/AgreementsParent';
+import AgreementsSitter from './pages/sitter/AgreementsSitter';
 
 const UserType = {
   SITTER: "sitter",
@@ -89,6 +91,7 @@ function App() {
               <Route path="/sitter/ads" element={<Ads/>}/>
               <Route path="/sitter/ad/edit/:id" element={<AdEdit/>}/>
               <Route path="/sitter/interests" element={<InterestsSitter/>}/>
+              <Route path="/sitter/agreements" element={<AgreementsSitter/>}/>
             </>
           }
           {
@@ -99,6 +102,7 @@ function App() {
               <Route path="/parent/interests" element={<InterestsParent/>}/>
               <Route path="/parent/createInterestFor/:id" element={<CreateInterestFor/>}/>
               <Route path="/parent/interest/edit/:id" element={<EditInterestFor/>}/>
+              <Route path="/parent/agreements" element={<AgreementsParent/>}/>
             </>
           }
           <Route path="*" element={<Error/>} />

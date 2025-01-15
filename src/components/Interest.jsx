@@ -2,7 +2,7 @@ import { Button, Card, CardActions, CardContent, CardHeader, Typography } from "
 import { useNavigate } from "react-router-dom";
 import { useAppCtx } from "../appCtx";
 import { db } from "../firebase";
-import {doc, updateDoc } from "firebase/firestore";
+import {addDoc, collection, deleteDoc, doc, updateDoc } from "firebase/firestore";
 
 const countSignatures = (signatures) => {
   return Object.values(signatures).filter(Boolean).length;
@@ -60,9 +60,19 @@ export default function Interest({interest, canEdit, showActions, fetchInterests
             "signatures.proposer": true,
           });
         }
-        if(countSignatures(interest.signatures) == 1)
+        if(countSignatures(interest.signatures) > 1)
         {
           // create agreement
+          await addDoc(collection(db, "agreements"), {
+            sitter: interest.recipient,
+            parent: interest.proposer,
+            ad: interest.ad,
+          });
+          const interestRef = doc(db, "interests", interest.id);
+          await deleteDoc(interestRef);
+
+          const adRef = doc(db, "ads", interest.ad);
+          await deleteDoc(adRef);
         } 
         fetchInterests();
       } catch (error) {

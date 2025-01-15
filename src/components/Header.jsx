@@ -52,6 +52,13 @@ function Header() {
                   <>
                     <Button
                       component={Link}
+                      to="/sitter/agreements"
+                      color="inherit"
+                    >
+                      ΣΥΜΦΩΝΙΕΣ
+                    </Button>
+                    <Button
+                      component={Link}
                       to="/sitter/interests"
                       color="inherit"
                     >
@@ -67,13 +74,22 @@ function Header() {
                   </>
                   }
                   {userType == "parent" &&
-                    <Button
-                      component={Link}
-                      to="/parent/interests"
-                      color="inherit"
-                    >
-                      Ενδιαφεροντα
-                    </Button>
+                    <>
+                      <Button
+                        component={Link}
+                        to="/parent/agreements"
+                        color="inherit"
+                      >
+                        ΣΥΜΦΩΝΙΕΣ
+                      </Button>                   
+                      <Button
+                        component={Link}
+                        to="/parent/interests"
+                        color="inherit"
+                      >
+                        Ενδιαφεροντα
+                      </Button>
+                    </>
                   }
                   <Button
                     color="inherit"
