@@ -48,6 +48,15 @@ function Header() {
           {user ? (
               // If the user is logged in
               <>
+                  {userType == "sitter" && 
+                    <Button
+                      component={Link}
+                      to="/sitter/ratings"
+                      color="inherit"
+                    >
+                      ΑΞΙΟΛΟΓΗΣΕΙΣ
+                    </Button>
+                  }
                   <Button
                     component={Link}
                     to="/agreements"

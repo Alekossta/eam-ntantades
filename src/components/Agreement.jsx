@@ -1,14 +1,17 @@
 import { Box, Button, Card, CardActions, CardContent, CardHeader, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useAppCtx } from "../appCtx";
-import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase";
+import { useNavigate } from "react-router-dom";
 
-export default function Agreement({agreement})
+export default function Agreement({agreement, fetchAgreements, canEnd})
 {
     const {userType} = useAppCtx();
     const [sitter, setSitter] = useState();
     const [parent, setParent] = useState();
+    
+    const navigate = useNavigate();
 
     const fetchOtherParty = async () => {
         if(userType == "sitter")
@@ -32,12 +35,15 @@ export default function Agreement({agreement})
     }, []);
 
     const onEndClicked = async () => {
-        console.log(agreement);
+        const agreementRef = doc(db, "agreements", agreement.id);
+        await deleteDoc(agreementRef);
+        await fetchAgreements();
+        navigate("/parent/rate/" + agreement.sitter);
     };
     
     return <Card sx={{width: "50%"}}>
         <CardHeader title="Συμφωνία με:"/>
-        <CardContent>
+        <CardContent sx={{display:"flex", flexDirection: "column", gap: "1rem"}}>
             {parent && 
                 <Box>
                     <Typography>
@@ -53,10 +59,13 @@ export default function Agreement({agreement})
                 </Box>
             }
             <Typography>
-                Ξεκίνησε: {agreement.startedAt.toDate().toLocaleString()}
+                Ξεκίνησε: {agreement.startedAt.toDate().toLocaleDateString('en-GB')}
+            </Typography>
+            <Typography>
+                Επόμενη {userType == "parent" ? "αυτόματη" : ""} πληρωμή: {new Date(agreement.startedAt.toDate().setMonth(agreement.startedAt.toDate().getMonth() + 1)).toLocaleDateString('en-GB')}
             </Typography>
         </CardContent>
-        <CardActions
+        {canEnd && <CardActions
             sx={{
                 justifyContent: "flex-end", // Aligns the buttons to the right
             }}
@@ -75,6 +84,6 @@ export default function Agreement({agreement})
             >
                 ΛΗΞΗ
             </Button>
-        </CardActions>
+        </CardActions>}
     </Card>
 }

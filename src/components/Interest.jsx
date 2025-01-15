@@ -60,7 +60,7 @@ export default function Interest({interest, canEdit, showActions, fetchInterests
             "signatures.proposer": true,
           });
         }
-        if(countSignatures(interest.signatures) > 1)
+        if(countSignatures(interest.signatures) >= 1)
         {
           // create agreement
           await addDoc(collection(db, "agreements"), {

@@ -9,36 +9,37 @@ export default function Agreements()
 {
     const [agreements, setAgreements] = useState([]);
     const {user, userType} = useAppCtx();
-    useEffect(() => {
-        const fetchAgreements = async () => {
-            try
+    const fetchAgreements = async () => {
+        try
+        {
+            let q;
+            if(userType == "sitter")
             {
-                let q;
-                if(userType == "sitter")
-                {
-                    q = query(collection(db, "agreements"), where("sitter", "==", user.uid));
-                }
-                else if (userType == "parent")
-                {
-                    q = query(collection(db, "agreements"), where("parent", "==", user.uid));
-                }
-
-                if(userType != "not_logged_in")
-                {
-                    const querySnapshot = await getDocs(q);
-                    const agreementsTemp = querySnapshot.docs.map(doc => ({
-                        id: doc.id,
-                        ...doc.data()
-                    }));
-                    setAgreements(agreementsTemp);
-                }
-
+                q = query(collection(db, "agreements"), where("sitter", "==", user.uid));
             }
-            catch(e)
+            else if (userType == "parent")
             {
-                console.log(e);
+                q = query(collection(db, "agreements"), where("parent", "==", user.uid));
             }
+
+            if(userType != "not_logged_in")
+            {
+                const querySnapshot = await getDocs(q);
+                const agreementsTemp = querySnapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+                setAgreements(agreementsTemp);
+            }
+
         }
+        catch(e)
+        {
+            console.log(e);
+        }
+    }
+    useEffect(() => {
+       
 
         if(user)
         {
@@ -49,6 +50,6 @@ export default function Agreements()
         <Typography variant="h2">
             Οι συμφωνίες σου
         </Typography>
-        {agreements.map((el) => <Agreement key={el.id} agreement={el}/>)}
+        {agreements.map((el) => <Agreement key={el.id} agreement={el} fetchAgreements={fetchAgreements} canEnd={userType == "parent"}/>)}
     </Box>
 }
