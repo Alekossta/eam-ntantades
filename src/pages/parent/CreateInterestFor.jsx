@@ -42,7 +42,7 @@ export default function CreateInterestFor()
     }, [])
 
     const onSubmit = async (data, isPublished) => {
-        await addDoc(collection(db, "interests"), {proposer: user.uid, recipient: ad.owner, ad: ad.id,isPublished,  ...data});
+        await addDoc(collection(db, "interests"), {proposer: user.uid, signatures: {proposer: false, recipient: false}, state: "standby", recipient: ad.owner, ad: ad.id,isPublished,  ...data});
         navigate("/parent/interests");
     }
 
@@ -75,22 +75,22 @@ export default function CreateInterestFor()
                         <FormHelperText>{errors.description?.message}</FormHelperText>
                     </FormControl>
                     <Box display="flex" gap="16px" marginTop="16px">
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                fullWidth
-                                onClick={handleSubmit((data) => onSubmit(data, true))}
-                            >
-                                ΔΗΛΩΣΗ
-                            </Button>
-                            <Button
-                                variant="outlined"
-                                color="secondary"
-                                fullWidth
-                                onClick={handleSubmit((data) => onSubmit(data, false))}
-                            >
-                                ΑΠΟΘΗΚΕΥΣΗ
-                            </Button>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            fullWidth
+                            onClick={handleSubmit((data) => onSubmit(data, true))}
+                        >
+                            ΔΗΛΩΣΗ
+                        </Button>
+                        <Button
+                            variant="outlined"
+                            color="secondary"
+                            fullWidth
+                            onClick={handleSubmit((data) => onSubmit(data, false))}
+                        >
+                            ΑΠΟΘΗΚΕΥΣΗ
+                        </Button>
                     </Box>
                 </form>
             </CardContent>
