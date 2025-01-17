@@ -1,4 +1,4 @@
-import { Box, Rating } from "@mui/material";
+import { Box, Rating, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useAppCtx } from "../../appCtx";
 import { collection, getDocs, query, where } from "firebase/firestore";
@@ -33,6 +33,9 @@ export default function RatingsSitter()
         fetchRatings();
     }, [])
     return <Box sx={{display:"flex", flexDirection:"column", gap:"2rem",alignItems: "center"}}>
+        <Typography variant="h2">
+          Οι αξιολογήσεις σου
+        </Typography>
         {ratings.map((rat) => <RatingCard rating={rat} key={rat.id}/>)}
     </Box>
 }

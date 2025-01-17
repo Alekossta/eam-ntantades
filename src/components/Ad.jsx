@@ -36,7 +36,6 @@ export default function Ad({ad, canEdit, canShowInterest})
               const querySnapshot = await getDocs(q);
               if (!querySnapshot.empty) {
                 const doc = querySnapshot.docs[0];
-                console.log(doc.data());
                 setOwnerUser({ id: doc.id, ...doc.data() });
               } else {
                 console.log("No document found with the specified ID.");

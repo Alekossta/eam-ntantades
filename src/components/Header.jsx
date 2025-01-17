@@ -48,6 +48,15 @@ function Header() {
           {user ? (
               // If the user is logged in
               <>
+                  {userType == "parent" && 
+                    <Button
+                      component={Link}
+                      to="/parent/search"
+                      color="inherit"
+                    >
+                      ΨΑΞΕ ΑΓΓΕΛΙΕΣ
+                    </Button>
+                  }
                   {userType == "sitter" && 
                     <Button
                       component={Link}

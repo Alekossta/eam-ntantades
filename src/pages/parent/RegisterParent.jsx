@@ -77,6 +77,10 @@ const {
             const formattedDateBirth = data.dateBirth
             ? new Date(data.dateBirth) // Convert to Date object
             : null;
+
+            const formattedExpireDate = data.expirationDate
+            ? new Date(data.expirationDate) // Convert to Date object
+            : null;
             
             // Save additional user info in Firestore
             await setDoc(doc(db, "users", user.uid), {
@@ -90,6 +94,13 @@ const {
                 parent:
                 {
                     family: data.family || "",
+                },
+                paymentInfo:
+                {
+                    voucher: data.voucher,
+                    cardNumber: data.cardNumber,
+                    cardCvv: data.cvv,
+                    expirationDate: formattedExpireDate
                 }
             });
 
@@ -341,6 +352,101 @@ const {
                     )}
                     />
                     <FormHelperText>{errors.family?.message}</FormHelperText>
+                </FormControl>
+
+                <FormControl fullWidth margin="normal" error={!!errors.voucher}>
+                    <Controller
+                        name="voucher"
+                        control={control}
+                        defaultValue=""
+                        render={({ field }) => (
+                        <TextField
+                            {...field}
+                            label="Voucher"
+                            variant="outlined"
+                            error={!!errors.voucher}
+                        />
+                        )}
+                    />
+                    <FormHelperText>{errors.voucher?.message}</FormHelperText>
+                </FormControl>
+
+                    {/* Card Number Input */}
+                    <FormControl fullWidth margin="normal" error={!!errors.cardNumber}>
+                    <Controller
+                    name="cardNumber"
+                    control={control}
+                    defaultValue=""
+                    rules={{
+                        required: "Το νούμερο κάρτας είναι υποχρεωτικό",
+                        pattern: {
+                            value: /^[0-9]*$/,
+                            message: "Επιτρέπονται μόνο αριθμοι",
+                        },
+                    }}
+                    render={({ field }) => (
+                        <TextField
+                            {...field} 
+                            type="number" 
+                            label="Νούμερο πιστωτικής κάρτας" 
+                            variant="outlined" 
+                            error={!!errors.cardNumber}
+                        />
+                    )}
+                    />
+                    <FormHelperText>{errors.cardNumber?.message}</FormHelperText>
+                </FormControl>
+
+                    {/* CVV Input */}
+                    <FormControl fullWidth margin="normal" error={!!errors.cvv}>
+                    <Controller
+                    name="cvv"
+                    control={control}
+                    defaultValue=""
+                    rules={{
+                        required: "Το CVV είναι υποχρεωτικό",
+                        pattern: {
+                            value: /^[0-9]*$/,
+                            message: "Επιτρέπονται μόνο αριθμοι",
+                        },
+                    }}
+                    render={({ field }) => (
+                        <TextField
+                            {...field} 
+                            type="number" 
+                            label="CVV πιστωτικής κάρτας" 
+                            variant="outlined" 
+                            error={!!errors.cvv}
+                        />
+                    )}
+                    />
+                    <FormHelperText>{errors.cvv?.message}</FormHelperText>
+                </FormControl>
+
+                <FormControl fullWidth margin="normal" error={!!errors.expirationDate}>
+                    <Controller
+                        name="expirationDate"
+                        control={control}
+                        rules={{ required: "Expiration date is required" }}
+                        render={({ field }) => (
+                        <DatePicker
+                            {...field}
+                            onChange={(date) => field.onChange(date)}
+                            value={field.value}
+                            label="Ημερομήνια λήξης πιστωτικής κάρτας"
+                            format="MM/YYYY"
+                            renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                error={!!errors.expirationDate}
+                                helperText={errors.expirationDate?.message || ""}
+                                variant="outlined"
+                            />
+                            )}
+                        />
+                        )}
+                    />
+                    <FormHelperText>{errors.expirationDate?.message}</FormHelperText>
                 </FormControl>
 
                 <Button
