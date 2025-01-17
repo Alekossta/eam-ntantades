@@ -7,3 +7,14 @@ export const dayTranslations = {
     'Σάββατο': 'saturday',
     'Κυριακή': 'sunday',
 };
+
+export const studiesTranslations = {
+    "highSchool": "Λύκειο",
+    "underGraduate": "Προπτυχιακό",
+    "postGraduate": "Μεταπτυχιακό"
+}
+
+export const workTypeTranslations = {
+    "partime": "Μερική Απασχόληση",
+    "fulltime": "Πλήρης Απσχόληση"
+}

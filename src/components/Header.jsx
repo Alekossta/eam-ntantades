@@ -10,6 +10,7 @@ function Header() {
   const navigate = useNavigate();
   const {user, userType} = useAppCtx();
   const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorEl2, setAnchorEl2] = useState(null);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -17,6 +18,14 @@ function Header() {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleClick2 = (event) => {
+    setAnchorEl2(event.currentTarget);
+  };
+
+  const handleClose2 = () => {
+    setAnchorEl2(null);
   };
 
   const handleLogout = async () => {
@@ -83,12 +92,26 @@ function Header() {
                       ΕΝΔΙΑΦΕΡΟΝΤΑ
                     </Button>
                     <Button
-                      component={Link}
-                      to="/sitter/ads"
-                      color="inherit"
+                    color="inherit"
+                    onClick={handleClick2}
                     >
                       ΑΓΓΕΛΙΕΣ
                     </Button>
+                    <Menu
+                      id="simple-menu2"
+                      anchorEl={anchorEl2}
+                      keepMounted
+                      open={Boolean(anchorEl2)}
+                      onClose={handleClose2}
+                    >
+                      <MenuItem component={Link} to={"sitter/ad-create"}
+                      onClick={handleClose2}>
+                        ΦΤΙΑΞΕ ΑΓΓΕΛΙΑ
+                      </MenuItem>
+                      <MenuItem component={Link} to="/sitter/ads" onClick={handleClose2}>
+                        ΑΓΓΕΛΙΕΣ ΣΟΥ
+                      </MenuItem>
+                    </Menu>
                   </>
                   }
                   {userType == "parent" &&

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { db } from "../firebase";
 import { collection, getDocs, limit, query, where } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
+import { workTypeTranslations, studiesTranslations } from "../translations";
 
 const days = [
     "Δευτέρα",
@@ -66,7 +67,7 @@ export default function Ad({ad, canEdit, canShowInterest})
                 Τοποθεσία: {ad.location || ""} 
             </Typography>
             <Typography>
-                Τύπος Απασχόλησης: {ad.worktype} 
+                Τύπος Απασχόλησης: {workTypeTranslations[ad.worktype]} 
             </Typography>
             {days.map((el) => {
                 if(ad[dayTranslations[el]])
@@ -94,13 +95,10 @@ export default function Ad({ad, canEdit, canShowInterest})
                     Ονοματεπώνυμο: {ownerUser.firstName} {ownerUser.lastName}
                 </Typography>
                 <Typography>
-                    Τηλέφωνο: {ownerUser.phone}
-                </Typography>
-                <Typography>
                     Εμπειρία: {ownerUser.sitter.experience}
                 </Typography>
                 <Typography>
-                    Σπουδές: {ownerUser.sitter.studies}
+                    Σπουδές: {studiesTranslations[ownerUser.sitter.studies]}
                 </Typography>
             </CardContent>
         }
@@ -119,7 +117,7 @@ export default function Ad({ad, canEdit, canShowInterest})
         }}
         >
             <Button size="medium" variant="contained" color="secondary" onClick={showInterestButtonClicked}>
-                Show Interest
+                ΕΝΦΙΑΦΕΡΟΜΑΙ
             </Button>
         </CardActions>}
     </Card>)

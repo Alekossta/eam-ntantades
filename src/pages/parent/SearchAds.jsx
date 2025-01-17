@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import Ad from "../../components/Ad";
 import { collection, getDocs, query, where } from "firebase/firestore";
@@ -33,6 +33,9 @@ export default function SearchAds()
             alignItems: "center"
         }}
     >
+        <Typography variant="h2" sx={{marginTop: "2rem"}}>
+            Αγγελίες
+        </Typography>
         {ads.map((ad) => {
             return <Ad ad={ad} key={ad.id} canShowInterest={true}/>
         })}

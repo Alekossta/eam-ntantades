@@ -56,7 +56,7 @@ const Login = () => {
                 {errorMessage}
             </Alert>
         </Snackbar>
-        <Card style={{ maxWidth: 400, margin: "20px auto", padding: "10px" }}>
+        <Card style={{ maxWidth: 700, margin: "20px auto", padding: "10px" }}>
         <CardHeader title="Login" />
         <CardContent>
             <form onSubmit={handleSubmit(onSubmit)}>
