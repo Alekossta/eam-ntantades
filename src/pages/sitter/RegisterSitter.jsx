@@ -128,7 +128,39 @@ const {
                 {errorMessage}
             </Alert>
         </Snackbar>
-        <Card style={{ maxWidth: 600, margin: "20px auto", padding: "10px" }}>
+        <Card style={{ width: "40%", margin: "20px auto", padding: "10px" }}>
+            <CardHeader title="Πληροφορίες Νταντά" />
+            <CardContent sx={{display:"flex", flexDirection: "column", gap: "1rem"}}>
+                <Typography variant="h6">
+                    Εγγραφή στην πλατφόρμα
+                </Typography>
+                <Typography>
+                    Για να εγραφείτε στην πλατφόρμα το μόνο που έχετε να κάνετε είναι να συμπληρώστε όλα τα πεδία
+                    στην παρακάτω φόρμα
+                </Typography>
+                <Typography variant="h6">
+                    Λειτουργίες που προσφέρονται σε νταντάδες
+                </Typography>
+                <List sx={{padding: 0}}>
+                    <ListItem sx={{padding: 0}}>
+                        <ListItemText primary="- Δημιουργία αγγελιών" />
+                    </ListItem>
+                    <ListItem sx={{padding: 0}}>
+                        <ListItemText primary="- Αποδοχή ή απόρριψη ενδιαφέροντος γονέα" />
+                    </ListItem>
+                    <ListItem sx={{padding: 0}}>
+                        <ListItemText primary="- Υπογραφή συμφωνητικού (εφόσον υπογράφει και ο γονέας)" />
+                    </ListItem>
+                    <ListItem sx={{padding: 0}}>
+                        <ListItemText primary="- Μηνιαία αυτόματη πληρωμή" />
+                    </ListItem>
+                    <ListItem sx={{padding: 0}}>
+                        <ListItemText primary="- Αξιολογείται απο γονείς" />
+                    </ListItem>
+                </List>
+            </CardContent>
+        </Card>
+        <Card style={{ width: "40%", margin: "20px auto", padding: "10px" }}>
         <CardHeader title="Εγγραφή Νταντά" />
         <CardContent>
             <form onSubmit={handleSubmit(onSubmit)}>

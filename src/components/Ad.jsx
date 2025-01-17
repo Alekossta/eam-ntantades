@@ -108,7 +108,7 @@ export default function Ad({ad, canEdit, canShowInterest})
         }}
         >
             <Button size="medium" variant="contained" color="secondary" onClick={editButtonClicked}>
-                Edit
+                ΕΠΕΞΕΡΓΑΣΙΑ
             </Button>
         </CardActions>}
         {canShowInterest && <CardActions

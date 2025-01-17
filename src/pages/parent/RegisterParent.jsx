@@ -122,7 +122,39 @@ const {
                 {errorMessage}
             </Alert>
         </Snackbar>
-        <Card style={{ maxWidth: 600, margin: "20px auto", padding: "10px" }}>
+        <Card style={{ width: "40%", margin: "20px auto", padding: "10px" }}>
+            <CardHeader title="Πληροφορίες Γονέα" />
+            <CardContent sx={{display:"flex", flexDirection: "column", gap: "1rem"}}>
+                <Typography variant="h6">
+                    Εγγραφή στην πλατφόρμα
+                </Typography>
+                <Typography>
+                    Για να εγραφείτε στην πλατφόρμα το μόνο που έχετε να κάνετε είναι να συμπληρώστε όλα τα πεδία
+                    στην παρακάτω φόρμα
+                </Typography>
+                <Typography variant="h6">
+                    Λειτουργίες που προσφέρονται σε γονείς
+                </Typography>
+                <List sx={{padding: 0}}>
+                    <ListItem sx={{padding: 0}}>
+                        <ListItemText primary="- Αναζήτηση αγγελιών" />
+                    </ListItem>
+                    <ListItem sx={{padding: 0}}>
+                        <ListItemText primary="- Δήλωση ενδιαφέροντος σε αγγελία" />
+                    </ListItem>
+                    <ListItem sx={{padding: 0}}>
+                        <ListItemText primary="- Υπογραφή συμφωνητικού (εφόσον υπογράφει και η νταντά)" />
+                    </ListItem>
+                    <ListItem sx={{padding: 0}}>
+                        <ListItemText primary="- Μηνιαία αυτόματη πληρωμή" />
+                    </ListItem>
+                    <ListItem sx={{padding: 0}}>
+                        <ListItemText primary="- Λήξη συνεργασίας και αξιολόγηση νταντάς" />
+                    </ListItem>
+                </List>
+            </CardContent>
+        </Card>
+        <Card style={{ width: "40%", margin: "20px auto", padding: "10px" }}>
         <CardHeader title="Εγγραφή Γονέα" />
         <CardContent>
             <form onSubmit={handleSubmit(onSubmit)}>
