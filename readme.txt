@@ -5,3 +5,7 @@
 Εχουμε υλοποιησει ολες τις απαιτησεις της εργασιας
 
 GitHub Repo: https://github.com/Alekossta/eam-ntantades
+
+Πως να το τρεξετε:
+- npm install (την πρωτη φορα)
+- npm run dev
