@@ -2,7 +2,8 @@ import { Button, Card, CardActions, CardContent, CardHeader, Typography } from "
 import { useNavigate } from "react-router-dom";
 import { useAppCtx } from "../appCtx";
 import { db } from "../firebase";
-import {addDoc, collection, deleteDoc, doc, serverTimestamp, updateDoc } from "firebase/firestore";
+import {addDoc, collection, deleteDoc, doc, getDoc, serverTimestamp, updateDoc } from "firebase/firestore";
+import { useEffect, useState } from "react";
 
 const countSignatures = (signatures) => {
   return Object.values(signatures).filter(Boolean).length;
@@ -12,6 +13,50 @@ export default function Interest({interest, canEdit, showActions, fetchInterests
 {
     const navigate = useNavigate();
     const {user, userType} = useAppCtx();
+    const [phone, setPhone] = useState();
+
+    const fetchParentPhone = async () => {
+      try
+      {
+        const parentDocRef = doc(db, "users", interest.proposer);
+        const parentDoc = await getDoc(parentDocRef);
+        if(parentDoc.exists())
+        {
+          setPhone(parentDoc.data().phone);
+        }
+      }
+      catch(e)
+      {
+        console.log(e);
+      }
+    }
+
+    const fetchSitterPhone = async () => {
+      try
+      {
+        const sitterDocRef = doc(db, "users", interest.recipient);
+        const sitterDoc = await getDoc(sitterDocRef);
+        if(sitterDoc.exists())
+        {
+          setPhone(sitterDoc.data().phone);
+        }
+      }
+      catch(e)
+      {
+        console.log(e);
+      }
+    }
+
+    useEffect(() => {
+      if (userType == "sitter")
+      {
+        fetchParentPhone();
+      }
+      else if(userType == "parent")
+      {
+        fetchSitterPhone();
+      }
+    }, [interest])
 
     const editButtonClicked = () => {
       navigate("/parent/interest/edit/" + interest.id);
@@ -87,6 +132,9 @@ export default function Interest({interest, canEdit, showActions, fetchInterests
             <Typography>
               Περιγραφή: {interest.description}  
             </Typography>
+            {canSign && phone && <Typography>
+              Τηλέφωνο: {phone}  
+            </Typography>}
         </CardContent>
         {canEdit && <CardActions
         sx={{
