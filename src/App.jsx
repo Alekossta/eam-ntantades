@@ -72,7 +72,6 @@ function App() {
         display: 'flex',
         flexDirection: 'column',
         minHeight: '100vh',
-        height: "100%"
       }}
     >
       <AppContext.Provider value={{user, userType}}>
